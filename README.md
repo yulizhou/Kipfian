@@ -1,16 +1,20 @@
 # Kipfian
 
 day 2 scrum:
+
 What I did:
+
 1. loaded into MongoDB
 2. finished EDA
 3. finished naive base model
 
 Roadblock:
+
 1. feature engineering with multi-level features
 2. find an efficient way to try models with more and more data
 
 Planning to do:
+
 1. Add text features
 
 
@@ -41,10 +45,10 @@ Planning to do:
 ### Day 8
 - [ ] Add visual effect
 
-### Day 9
 
 
 
+-------------------
 
 
 
