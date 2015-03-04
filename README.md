@@ -1,21 +1,34 @@
 # Kipfian
 
-day 2 scrum:
+day 3 scrum:
 
 What I did:
 
-1. loaded into MongoDB
-2. finished EDA
-3. finished naive base model
+1. created two recommebers with graphlab
 
 Roadblock:
 
-1. feature engineering with multi-level features
-2. find an efficient way to try models with more and more data
+1. need to learn ways to improve performance
+2. what features to add
 
 Planning to do:
 
-1. Add text features
+1. get on the right path and add features
+2. try SVD or other methods to improve performance
+
+
+
+Three ways to proceed:
+
+1. improve current item-item rec sys
+2. create a model to calculate a score/likelihood and feed into a rec sys as 'rating'
+3. use factorization recommender to find latent features and explain
+
+
+final product:
+a rec sys
+
+
 
 
 ##To-do
@@ -30,11 +43,18 @@ Planning to do:
     - [x] How about the number of lenders of each loan?
 
 ### Day 2
-- [ ] Finish iter 0: naive rec sys base model with Dato
-- [ ] Finish iter 1: Add tfidf of text fields
+- [x] Finish iter 0: naive rec sys base model with Dato
+- [x] Finish iter 1: use Dato's factorization recommender
 
-### Day 3 ~ 5
-- [ ] Finish iter 3 to n: try other features
+### Day 3
+- [ ] Improve the base model to be functioning
+- [ ] Finish iter 3: add features and try SVD
+
+### Day 4
+- [ ] Finish iter n: 
+
+### Day 5
+- [ ] Finish iter n: 
 
 ### Day 6
 - [ ] Try image processing with [this](http://cs.stanford.edu/people/karpathy/deepimagesent/?hn)
