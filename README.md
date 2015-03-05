@@ -1,6 +1,6 @@
 # Kipfian
 
-day 3 scrum:
+day 4 scrum:
 
 What I did:
 
@@ -13,8 +13,9 @@ Roadblock:
 
 Planning to do:
 
-1. successfully run the first model with side features added
-2. improve the performance of getting data from mongodb
+1. get rid of duplicates in data
+2. successfully run the first model with side features added
+3. improve the performance of getting data from mongodb
 
 
 
@@ -37,8 +38,10 @@ Planning to do:
 ### Day 3
 - [x] Understand ranking factorization machine
 - [ ] Finish iter 3: add naive features as side features (date, month, year lended)
+- [ ] Research on how to train the model on new loans and new users in graphlab
 
 ### Day 4
+- [ ] Drop duplicates in mongodb
 - [ ] Finish iter n: add text-related features
 
 ### Day 5
