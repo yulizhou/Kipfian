@@ -38,10 +38,10 @@ Planning to do:
 ### Day 3
 - [x] Understand ranking factorization machine
 - [ ] Finish iter 3: add naive features as side features (date, month, year lended)
-- [ ] Research on how to train the model on new loans and new users in graphlab
 
 ### Day 4
-- [ ] Drop duplicates in mongodb
+- [x] Drop duplicates in mongodb
+- [ ] Research on how to train the model on new loans and new users in graphlab
 - [ ] Finish iter n: add text-related features
 
 ### Day 5
