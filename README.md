@@ -4,29 +4,17 @@ day 3 scrum:
 
 What I did:
 
-1. created two recommebers with graphlab
+1. resesarch and read the paper on factorization machine and switch the focus from implementing complex algorithm to feature engineering + using graphlab module
 
 Roadblock:
 
-1. need to learn ways to improve performance
-2. what features to add
+1. the performance getting data from mongodb
+2. the performance training the model
 
 Planning to do:
 
-1. get on the right path and add features
-2. try SVD or other methods to improve performance
-
-
-
-Three ways to proceed:
-
-1. improve current item-item rec sys
-2. create a model to calculate a score/likelihood and feed into a rec sys as 'rating'
-3. use factorization recommender to find latent features and explain
-
-
-final product:
-a rec sys
+1. successfully run the first model with side features added
+2. improve the performance of getting data from mongodb
 
 
 
@@ -47,11 +35,11 @@ a rec sys
 - [x] Finish iter 1: use Dato's factorization recommender
 
 ### Day 3
-- [ ] Improve the base model to be functioning
-- [ ] Finish iter 3: add features and try SVD
+- [x] Understand ranking factorization machine
+- [ ] Finish iter 3: add naive features as side features (date, month, year lended)
 
 ### Day 4
-- [ ] Finish iter n: 
+- [ ] Finish iter n: add text-related features
 
 ### Day 5
 - [ ] Finish iter n: 
