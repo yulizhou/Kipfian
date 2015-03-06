@@ -37,15 +37,16 @@ Planning to do:
 
 ### Day 3
 - [x] Understand ranking factorization machine
-- [ ] Finish iter 3: add naive features as side features (date, month, year lended)
+- [x] Finish iter 3: add naive features as side features (date, month, year lended)
 
 ### Day 4
 - [x] Drop duplicates in mongodb
-- [ ] Research on how to train the model on new loans and new users in graphlab
+- [x] Research on how to train the model on new loans and new users in graphlab
 - [ ] Finish iter n: add text-related features
 
 ### Day 5
 - [ ] Finish iter n: 
+- [ ] Use loan amount as 'rating'
 
 ### Day 6
 - [ ] Try image processing with [this](http://cs.stanford.edu/people/karpathy/deepimagesent/?hn)
@@ -56,6 +57,8 @@ Planning to do:
 ### Day 8
 - [ ] Add visual effect
 
+### Day9
+- [ ] 
 
 
 
@@ -78,15 +81,19 @@ Runnable App: [](#)
 
 
 ## Difficulties
+data has duplicates
+data is large
 
 
 ## Getting Started
 
 
 ## Iteration 0
+item-item similarity
 
 
 ## Iteration 1
+ranking factorization without features
 
 
 ## Many Iterations...
