@@ -1,24 +1,34 @@
 # Kipfian
 
-day 5 scrum:
+day 8 scrum:
 
 What I did:
 
-1. got rid of duplicates
-2. found a tolerable amount of data to run locally, which is 100000, around 18%
 
 Roadblock:
 
-1. not understand why switch the direction of loan-lender could have that improvement
+1. numpy, scipy issues in ubuntu
+2. recommender performance is low
 
 Planning to do:
 
-1. transform the loan-lender data
-2. use text feature
-3. make plan for the weekend
-    1. solve the cold start issue for new user and new loan
+1. finish running tfidf iter 4
+    - address numpy & scipy issue in ubuntu
+2. try new feautures, iter 5
 
 
+
+uninstall pip numpy
+uninstall python-numpy
+
+
+
+
+
+screen -r
+
+for the cold start issue:
+recommend the newest 10 loans sorted by loan_amount
 
 
 ##To-do
@@ -43,24 +53,30 @@ Planning to do:
 ### Day 4
 - [x] Drop duplicates in mongodb
 - [x] Research on how to train the model on new loans and new users in graphlab
-- [ ] Finish iter n: add text-related features
 
 ### Day 5
 - [x] Transform data from loan-lenders to lender-loans
-- [ ] Retrain iter 3 model after got data loaded
-- [ ] Finish iter 4: adding text features
+- [x] Retrain iter 3 model after got data loaded
 
 ### Day 6
-- [ ] Find other features and train
+- [x] Design and config workflow with ec2
+    - [x] Clean and upload csv
+        - [x] loans
+        - [x] lenders
+        - [x] lenders_loans
+    - [x] Do a trial first, how to run on csv files only
+    - [x] Touch up all codes into .py and upload
+- [ ] Learn some factorization machine stuff
 
 ### Day 7
-- [ ] Try image processing with [this](http://cs.stanford.edu/people/karpathy/deepimagesent/?hn)
-- [ ] Finish online learning part
 
 ### Day 8
+- [ ] Finish iter 4: adding text features
 - [ ] Create a working prototype of the app
 
 ### Day 9
+- [ ] Finish online learning part
+- [ ] Try image processing with [this](http://cs.stanford.edu/people/karpathy/deepimagesent/?hn)
 - [ ] Create a working prototype of the app
 
 ### Day 10

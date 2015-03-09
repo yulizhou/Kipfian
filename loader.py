@@ -38,7 +38,7 @@ lenders_loans.insert(lender_ids)
 lenders_loans.ensure_index('lender_id', unique=True, dropDups=True)
 
 # transform and insert
-for i, file in enumerate(listdir('data/loans_lenders')):
+for file in listdir('data/loans_lenders'):
     d = json.load(open('data/loans_lenders/'+file))['loans_lenders']
     for loan_lenders in d:
         if loan_lenders['lender_ids'] is not None:
