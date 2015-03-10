@@ -1,6 +1,9 @@
 import pandas as pd
 import graphlab as gl
 from random import random
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.stem.snowball import SnowballStemmer
+from nltk.tokenize import word_tokenize
 
 
 # ##Feature Engineering
@@ -37,7 +40,7 @@ def clean_loan_data(df):
 
     # fill genders
     df['gender'] = df['gender'].map(lambda x: 'M' if random() <= 0.39 else 'F')
-    df['gender'] = df['gender'].map(lambda x: 1 if x == 'F' else 'M')
+    df['gender'] = df['gender'].map(lambda x: 1 if x == 'F' else 0)
 
     # fill null descriptions with empty string
     df['descriptions'] = df['descriptions'].fillna(0)
@@ -75,13 +78,62 @@ def drop_unexsiting_loan_ids(sf, df):
     return sf, df
 
 
+# dummify posted_date to seasons
+def convert_to_season(x):
+    m = x.month
+    if m < 4:
+        return 'Spring'
+    elif m < 7:
+        return 'Summer'
+    elif m < 11:
+        return 'Fall'
+    else:
+        return 'Winter'
+
+
+def tokenize(doc):
+    '''
+    INPUT: string
+    OUTPUT: list of strings
+
+    Tokenize and stem the document.
+    '''
+    snowball = SnowballStemmer('english')
+    return [snowball.stem(word) for word in word_tokenize(doc.lower())]
+
+
+def get_vectorizer(descriptions, num_features=100):
+    vect = TfidfVectorizer(max_features=num_features, stop_words='english', tokenizer=tokenize)
+    return vect.fit(descriptions)
+
+
 # getting features
 def get_loan_features(df):
-    features = df[['id', 'activity', 'sector', 'loan_amount', 'country', 'posted_date']]
-    features['day_of_year'] = features['posted_date'].map(lambda x: x.timetuple().tm_yday)
-    features = features.drop(['posted_date'], axis=1)
-    # convert features into SFrame
-    loan_feature = gl.SFrame(features.to_dict(orient='list'))
+    raw_features = df[['bonus_credit_eligibility', 'loan_amount', 'posted_date',
+                       'use', 'gender', 'family', 'country', 'repayment_term',
+                       'repayment_interval', 'id']]
+
+    raw_features['season'] = raw_features['posted_date'].map(lambda x: convert_to_season(x))
+    raw_features = pd.concat([raw_features,
+                              pd.get_dummies(raw_features['season'], prefix='season_')], axis=1)
+    raw_features = raw_features.drop(['season', 'posted_date'], axis=1)
+
+    # dummify repayment_interval
+    raw_features = pd.concat([raw_features,
+                              pd.get_dummies(raw_features['repayment_interval'],
+                              prefix='repayment_interval_')], axis=1)
+    raw_features = raw_features.drop(['repayment_interval'], axis=1)
+
+    # get tfidf of 'use'
+    text = raw_features['use'].values
+    tfidf = pd.DataFrame(get_vectorizer(text).transform(text).toarray())
+    tfidf.columns = tfidf.columns.astype(str)
+    tfidf = tfidf.astype(float)
+    raw_features = pd.concat([raw_features, tfidf], axis=1, join_axes=[raw_features.index])
+    # drop use
+    raw_features = raw_features.drop(['use'], axis=1)
+    raw_features = raw_features.fillna(0)
+    loan_feature = gl.SFrame(raw_features.to_dict(orient='list'))
     loan_feature.rename({'id': 'loan_id'})
     return loan_feature
 
@@ -115,18 +167,15 @@ def run_model(sf, df, loan_feature):
 
 if __name__ == '__main__':
     # load pairs into SFrame
-    # sf = gl.SFrame.read_csv('data/lender_loan_pairs.csv', header=False, delimiter=',', verbose=False)
-    # sf = clean_pair_date(sf)
+    sf = gl.SFrame.read_csv('data/lender_loan_pairs.csv', header=False, delimiter=',', verbose=False)
+    sf = clean_pair_date(sf)
 
     # Create side features
 
     df = pd.read_csv('data/loans.csv', delimiter=',')
     df = clean_loan_data(df)
-    # sf, df = drop_unexsiting_loan_ids(sf, df)
+    sf, df = drop_unexsiting_loan_ids(sf, df)
 
-    # loan_feature = get_loan_features(df)
+    loan_feature = get_loan_features(df)
 
-    # run_model(sf, df, loan_feature)
-
-    # print df.head()
-    print df.info()
+    run_model(sf, df, loan_feature)

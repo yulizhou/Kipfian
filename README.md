@@ -79,11 +79,9 @@ recommend the newest 10 loans sorted by loan_amount
 ### Day 8
 - [ ] Finish iter 4: adding text features
 - [ ] Create a working prototype of the app
-- [ ] Create an app
 
 ### Day 9
 - [ ] Finish online learning part
-- [ ] Try image processing with [this](http://cs.stanford.edu/people/karpathy/deepimagesent/?hn)
 - [ ] Create a working prototype of the app
 
 ### Day 10

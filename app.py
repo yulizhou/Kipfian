@@ -1,39 +1,30 @@
 from flask import Flask
 from flask import request
 from flask import render_template
-import pickle
+# import pickle
 import graphlab as gl
 
+
+# recommender = gl.load_model()
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    return '''
-    <form action="/predict_page" method='POST' >
-        <input type="text" name="user_input" />
-        <input type="submit" />
-    </form>
-    '''
+    return render_template('index.html')
 
 
-@app.route('/recommend', methods=['POST'])
-def recommend():
+@app.route('/show_recommendations', methods=['GET', 'POST'])
+def show_recommendations():
     lender_id = str(request.form['user_input'])
 
     # get model
-    rec = pickle.load(open('data/my_model.pkl', 'rb'))
+    # rec = pickle.load(open('data/my_model.pkl', 'rb'))
 
     # recommend
-    recommends = rec.recommend(lender_id, k=20)
-
-    return render_template(show_recommendations, recommends=recommends)
-
-
-@app.route('/show_recommendations')
-def show_recommendations():
-    return render_template(show_recommendations)
+    recommendation = recommender.recommend(lender_id, k=20)
+    return render_template('show_recommendations.html', recommendation=recommendation)
 
 
 if __name__ == '__main__':

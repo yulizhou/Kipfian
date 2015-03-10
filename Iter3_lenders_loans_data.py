@@ -1,12 +1,6 @@
 import pandas as pd
 import graphlab as gl
 from random import random
-from sklearn.feature_extraction.text import TfidfVectorizer
-# from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.stem.snowball import SnowballStemmer
-from nltk.tokenize import word_tokenize
-import numpy as np
-# import ipdb
 
 
 # ##Feature Engineering
@@ -36,17 +30,17 @@ def clean_loan_data(df):
     # drop nas
     df = df.dropna(subset=['earliest_scheduled_payment', 'last_scheduled_payment',
                            'repayment_interval', 'posted_date',
-                           'status', 'repayment_term', 'use', 'descriptions'], how='any')
+                           'status', 'repayment_term', 'use'], how='any')
 
     # fill paid_amount's na with zero
     df['paid_amount'] = df['paid_amount'].fillna(0)
 
     # fill genders
     df['gender'] = df['gender'].map(lambda x: 'M' if random() <= 0.39 else 'F')
-    df['gender'] = df['gender'].map(lambda x: 1 if x == 'F' else 0)
+    df['gender'] = df['gender'].map(lambda x: 1 if x == 'F' else 'M')
 
     # fill null descriptions with empty string
-    # df['descriptions'] = df['descriptions'].fillna(0)
+    df['descriptions'] = df['descriptions'].fillna(0)
 
     # binaralize bonus credit
     df['bonus_credit_eligibility'] = df['bonus_credit_eligibility'].map(lambda x: 1 if x == 'True' else 0)
@@ -81,42 +75,14 @@ def drop_unexsiting_loan_ids(sf, df):
     return sf, df
 
 
-# # define functions to lemmatize and vectorize text
-# def lemmatize_descriptions(descriptions):
-#     lem = WordNetLemmatizer()
-#     lemmatize = lambda d: " ".join(lem.lemmatize(word) for word in d.split())
-#     return [lemmatize(desc) for desc in descriptions]
-
-
-def tokenize(doc):
-    '''
-    INPUT: string
-    OUTPUT: list of strings
-
-    Tokenize and stem/lemmatize the document.
-    '''
-    snowball = SnowballStemmer('english')
-    return [snowball.stem(word) for word in word_tokenize(doc.lower())]
-
-
-def get_vectorizer(descriptions, num_features=2000):
-    vect = TfidfVectorizer(max_features=num_features, stop_words='english', tokenizer=tokenize)
-    return vect.fit(descriptions)
-
 
 # getting features
 def get_loan_features(df):
-    raw_features = df[['id', 'descriptions']]
-    # create tfidf features
-    # text = lemmatize_descriptions(raw_features['descriptions'].values)
-    text = raw_features['descriptions'].values
-    tfidf = pd.DataFrame(get_vectorizer(text).transform(text).toarray())
-    tfidf.columns = tfidf.columns.astype(str)
-    tfidf = tfidf.astype(float)
-    raw_features = raw_features.drop(['descriptions'], axis=1)
-    raw_features = pd.concat([raw_features, tfidf], axis=1, join_axes=[raw_features.index])
-    raw_features = raw_features.fillna(0)
-    loan_feature = gl.SFrame(raw_features.to_dict(orient='list'))
+    features = df[['id', 'activity', 'sector', 'loan_amount', 'country', 'posted_date']]
+    features['day_of_year'] = features['posted_date'].map(lambda x: x.timetuple().tm_yday)
+    features = features.drop(['posted_date'], axis=1)
+    # convert features into SFrame
+    loan_feature = gl.SFrame(features.to_dict(orient='list'))
     loan_feature.rename({'id': 'loan_id'})
     return loan_feature
 
@@ -146,7 +112,6 @@ def run_model(sf, df, loan_feature):
         print '='*100
         print 'MODEL ', i
         print m.evaluate(test, metric='precision_recall')
-        # print gl.evaluate.confusion_matrix(test['loan_id'], m.predict(test['lender_id']))
 
 
 if __name__ == '__main__':
@@ -157,7 +122,7 @@ if __name__ == '__main__':
     # Create side features
 
     df = pd.read_csv('data/loans.csv', delimiter=',')
-    df = clean_loan_data(df.ix[np.random.choice(df.index.values, 100000)])
+    df = clean_loan_data(df)
 
     sf, df = drop_unexsiting_loan_ids(sf, df)
     loan_feature = get_loan_features(df)
