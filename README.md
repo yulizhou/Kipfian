@@ -18,17 +18,23 @@ Planning to do:
 
 
 
-uninstall pip numpy
-uninstall python-numpy
-
-
-
-
 
 screen -r
 
 for the cold start issue:
 recommend the newest 10 loans sorted by loan_amount
+
+
+**Presentation**
+
+- Main idea
+- Biz value
+- some tech details
+- model results
+- challenges
+- insights (no demo)
+
+
 
 
 ##To-do
@@ -73,6 +79,7 @@ recommend the newest 10 loans sorted by loan_amount
 ### Day 8
 - [ ] Finish iter 4: adding text features
 - [ ] Create a working prototype of the app
+- [ ] Create an app
 
 ### Day 9
 - [ ] Finish online learning part

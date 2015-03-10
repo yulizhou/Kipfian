@@ -5,6 +5,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import word_tokenize
+import ipdb
+import numpy as np
 
 
 # ##Feature Engineering
@@ -97,7 +99,7 @@ def tokenize(doc):
     return [snowball.stem(word) for word in word_tokenize(doc.lower())]
 
 
-def get_vectorizer(descriptions, num_features=1500):
+def get_vectorizer(descriptions, num_features=300):
     vect = TfidfVectorizer(max_features=num_features, stop_words='english', tokenizer=tokenize)
     return vect.fit(descriptions)
 
@@ -110,7 +112,9 @@ def get_loan_features(df):
     text = raw_features['descriptions'].values
     tfidf = pd.DataFrame(get_vectorizer(text).transform(text).toarray())
     raw_features = raw_features.drop(['descriptions'], axis=1)
-    raw_features = raw_features.append(tfidf, ignore_index=True)
+    ipdb.set_trace()
+    raw_features = pd.concat([raw_features, tfidf], axis=1)
+    print 'raw features df done!!!!!!'
     return gl.SFrame(raw_features.to_dict(orient='list'))
 
 
@@ -139,6 +143,7 @@ def run_model(sf, df, loan_feature):
         print '='*100
         print 'MODEL ', i
         print m.evaluate(test, metric='precision_recall')
+        # print gl.evaluate.confusion_matrix(test['loan_id'], m.predict(test['lender_id']))
 
 
 if __name__ == '__main__':
@@ -149,7 +154,7 @@ if __name__ == '__main__':
     # Create side features
 
     df = pd.read_csv('data/loans.csv', delimiter=',')
-    df = clean_loan_data(df)
+    df = clean_loan_data(df.ix[np.random.choice(df.index.values, 100000)])
 
     sf, df = drop_unexsiting_loan_ids(sf, df)
     loan_feature = get_loan_features(df)
