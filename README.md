@@ -18,9 +18,6 @@ Planning to do:
 
 
 
-
-screen -r
-
 for the cold start issue:
 recommend the newest 10 loans sorted by loan_amount
 
@@ -28,11 +25,24 @@ recommend the newest 10 loans sorted by loan_amount
 **Presentation**
 
 - Main idea
-- Biz value
-- some tech details
-- model results
+- Biz value: understand lenders, help people get loan
+- the product (screen shots)
+- process
 - challenges
-- insights (no demo)
+    - cleaning
+    - graphlab with weird issues
+    - lack lender info
+    - not updated
+- insights (viz), what to show?
+    - distribution of features in the chosen model
+    - loan amount distribution
+    - lender count distribution
+    - lender count of loan by gender
+    - lender count of loan by country
+    - map: loan
+    - map: lender
+    - map: lender to loan, the lending flow
+- Next steps
 
 
 
@@ -72,19 +82,21 @@ recommend the newest 10 loans sorted by loan_amount
         - [x] lenders_loans
     - [x] Do a trial first, how to run on csv files only
     - [x] Touch up all codes into .py and upload
-- [ ] Learn some factorization machine stuff
+- [x] Learn some factorization machine stuff
 
 ### Day 7
 
 ### Day 8
-- [ ] Finish iter 4: adding text features
-- [ ] Create a working prototype of the app
+- [x] Finish iter 4: adding text features
 
 ### Day 9
 - [ ] Finish online learning part
-- [ ] Create a working prototype of the app
+- [x] Create a working prototype of the app
+- [ ] Start working on visualize for presentation, what to plot? what kind of plot?
+- [ ] Finish the front page and structure
 
 ### Day 10
+- [ ] Visualize for presentation
 - [ ] Add visual effect
 
 ### Day9

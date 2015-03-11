@@ -5,7 +5,7 @@ from flask import render_template
 import graphlab as gl
 
 
-# recommender = gl.load_model()
+# recommender = gl.load_model('themodel')
 
 app = Flask(__name__)
 

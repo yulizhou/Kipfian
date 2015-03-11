@@ -147,6 +147,8 @@ def run_model(sf, df, loan_feature):
         print 'MODEL ', i
         print m.evaluate(test, metric='precision_recall')
         # print gl.evaluate.confusion_matrix(test['loan_id'], m.predict(test['lender_id']))
+        print '='*10, 'Summary', '='*10
+        print m.summary()
 
 
 if __name__ == '__main__':
