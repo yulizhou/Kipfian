@@ -144,29 +144,20 @@ def run_model(sf, df, loan_feature):
     train, test = gl.recommender.util.random_split_by_user(sf, user_id='lender_id', item_id='loan_id', item_test_proportion=0.3)
 
     # compare models
-    models = []
-    regs = [0.1, 0.01]
-    num_factors = range(2, 5)
-    for n in num_factors:
-        for r in regs:
-            m = gl.recommender.ranking_factorization_recommender.create(train,
-                                                                        user_id='lender_id',
-                                                                        item_id='loan_id',
-                                                                        item_data=loan_feature,
-                                                                        num_factors=n,
-                                                                        regularization=r,
-                                                                        binary_target=True,
-                                                                        max_iterations=20,
-                                                                        verbose=True)
-            models.append(m)
+    m = gl.recommender.ranking_factorization_recommender.create(train,
+                                                                user_id='lender_id',
+                                                                item_id='loan_id',
+                                                                item_data=loan_feature,
+                                                                num_factors=5,
+                                                                regularization=0.01,
+                                                                binary_target=True,
+                                                                max_iterations=20,
+                                                                verbose=True)
 
-    for i, m in enumerate(models):
-        print '='*100
-        print 'MODEL ', i
-        print m.evaluate(test, metric='precision_recall')
-        print '='*10, 'Summary', '='*10
-        print m.summary()
-        m.save('models/iter5_'+str(i))
+    print m.evaluate(test, metric='precision_recall')
+    print '='*10, 'Summary', '='*10
+    print m.summary()
+    m.save('models/iter5_pipeline')
 
 
 if __name__ == '__main__':

@@ -42,6 +42,7 @@
 
 	p {
 		margin: 0 0 2em 0;
+		font-size: 90%;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
@@ -225,7 +226,8 @@
 		outline: 0;
 		padding: 0 1em;
 		text-decoration: none;
-		width: 100%;
+		width: 50%;
+		margin: auto;
 	}
 
 		input[type="text"]:invalid,
@@ -788,7 +790,8 @@
 		input[type="reset"].big,
 		input[type="button"].big,
 		.button.big {
-			font-size: 1.35em;
+			font-size: 1.3em;
+			margin: 1.15em 0 0 0;
 		}
 
 		input[type="submit"].alt,
@@ -962,7 +965,7 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 		color: #ffffff;
-		padding: 16em 0em 14em;
+		padding: 16em 0em 9em;
 		text-align: center;
 	}
 
@@ -976,7 +979,7 @@
 
 		#banner p {
 			font-size: 1.5em;
-			margin: 1.5em 0 0 0;
+			margin: 1.5em 0 1em 0;
 		}
 
 		#banner .actions {
@@ -991,6 +994,8 @@
 
 			#banner .button:hover {
 				background-color: rgba(255, 255, 255, 0.2);
+				/*background-color: #3ba666;*/
+				border: 1px solid #ffffff;
 			}
 
 /* Wrapper */
@@ -1040,7 +1045,7 @@
 	#footer {
 		background: #202222;
 		color: #888;
-		padding: 6em 0em 4em;
+		padding: 1em 0em 2em;
 	}
 
 		#footer h2, #footer h3, #footer h4 {

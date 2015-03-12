@@ -26,14 +26,8 @@ recommend the newest 10 loans sorted by loan_amount
 
 - Main idea
 - Biz value: understand lenders, help people get loan
-- the product (screen shots)
-- process
-- challenges
-    - cleaning
-    - graphlab with weird issues
-    - lack lender info
-    - not updated
-- insights (viz), what to show?
+- the product (screen shots) x2 slides
+- insights (viz), anything interesting
     - distribution of features in the chosen model
     - loan amount distribution
     - lender count distribution
@@ -42,8 +36,18 @@ recommend the newest 10 loans sorted by loan_amount
     - map: loan
     - map: lender
     - map: lender to loan, the lending flow
+- process: 
+    - thought process of choosing features, models, importance of features
+- challenges
+    - cleaning
+    - graphlab with weird issues
+    - lack lender info
+    - not updated
 - Next steps
+    - AB test
 
+
+compare to benchmark of randomly choosing
 
 
 
@@ -90,13 +94,18 @@ recommend the newest 10 loans sorted by loan_amount
 - [x] Finish iter 4: adding text features
 
 ### Day 9
-- [ ] Finish online learning part
 - [x] Create a working prototype of the app
-- [ ] Start working on visualize for presentation, what to plot? what kind of plot?
-- [ ] Finish the front page and structure
+- [x] Start working on visualize for presentation, what to plot? what kind of plot?
+- [x] Finish the front page and structure
+- [ ] Find out how to calculate F score from Graphlab
+- [ ] the diff b/w SVD and factorization in machine
+- [ ] Run simple item-item CF to compare
 
 ### Day 10
 - [ ] Visualize for presentation
+- [ ] Finish online learning part
+- [x] test app locally
+- [ ] upload to ec2
 - [ ] Add visual effect
 
 ### Day9

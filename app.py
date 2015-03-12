@@ -3,11 +3,12 @@ from flask import request
 from flask import render_template
 # import pickle
 import graphlab as gl
+import pandas as pd
 
-
-# recommender = gl.load_model('themodel')
 
 app = Flask(__name__)
+
+recommender = gl.load_model('models/iter5_pipeline')
 
 
 @app.route('/')
@@ -19,12 +20,19 @@ def index():
 def show_recommendations():
     lender_id = str(request.form['user_input'])
 
-    # get model
-    # rec = pickle.load(open('data/my_model.pkl', 'rb'))
-
     # recommend
-    recommendation = recommender.recommend(lender_id, k=20)
-    return render_template('show_recommendations.html', recommendation=recommendation)
+    recommended_ids = recommender.recommend([lender_id], k=5)
+    loans = pd.read_csv('data/loans.csv', delimiter=',')
+    recommendation = []
+    for r in recommended_ids:
+        loan_id = r['loan_id']
+        description = loans[loans['id'] == loan_id]['descriptions'].values[0]
+        if not pd.isnull(description):
+            img_id = loans[loans['id'] == loan_id]['image_id'].values[0]
+            img_url = "http://www.kiva.org/img/s170/" + img_id + ".jpg"
+            page_url = "http://www.kiva.org/lend/" + loan_id
+            recommendation.append((description, img_url, page_url))
+    return render_template('show_recommendations.html', recommendation=recommendation[:3])
 
 
 if __name__ == '__main__':
