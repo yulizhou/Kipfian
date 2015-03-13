@@ -8,7 +8,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-recommender = gl.load_model('models/iter5_pipeline')
+recommender = gl.load_model('models/item_item_cf')
 
 
 @app.route('/')

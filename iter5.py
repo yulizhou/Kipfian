@@ -39,7 +39,8 @@ def clean_loan_data(df):
     df['paid_amount'] = df['paid_amount'].fillna(0)
 
     # fill genders
-    df['gender'] = df['gender'].map(lambda x: 'M' if random() <= 0.39 else 'F')
+    df['gender'].fillna(df[df['gender'].isnull()]['gender']
+                        .map(lambda x: 'M' if random() <= 0.39 else 'F'), inplace=True)
     df['gender'] = df['gender'].map(lambda x: 1 if x == 'F' else 0)
 
     # fill null descriptions with empty string

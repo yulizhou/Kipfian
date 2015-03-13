@@ -1,53 +1,27 @@
 # Kipfian
 
-day 8 scrum:
-
-What I did:
-
-
-Roadblock:
-
-1. numpy, scipy issues in ubuntu
-2. recommender performance is low
-
-Planning to do:
-
-1. finish running tfidf iter 4
-    - address numpy & scipy issue in ubuntu
-2. try new feautures, iter 5
-
-
-
-for the cold start issue:
-recommend the newest 10 loans sorted by loan_amount
-
-
 **Presentation**
 
-- Main idea
-- Biz value: understand lenders, help people get loan
-- the product (screen shots) x2 slides
-- insights (viz), anything interesting
-    - distribution of features in the chosen model
-    - loan amount distribution
-    - lender count distribution
-    - lender count of loan by gender
-    - lender count of loan by country
-    - map: loan
-    - map: lender
-    - map: lender to loan, the lending flow
-- process: 
-    - thought process of choosing features, models, importance of features
-- challenges
-    - cleaning
-    - graphlab with weird issues
-    - lack lender info
-    - not updated
-- Next steps
-    - AB test
+Improvement:
+
+- Shorten the first part
+- Shorten the Next Step part
+- Add comparison
+    - Which features are important? How to decide?
+    - precision / recall / which one to optimize / AUC
+- Custom domain name
 
 
 compare to benchmark of randomly choosing
+
+
+Adam's advice:
+doesn't have to use FM
+show process of choosing between models
+show knowledge about the tradeoff
+show features used
+show good next steps
+
 
 
 
@@ -97,18 +71,21 @@ compare to benchmark of randomly choosing
 - [x] Create a working prototype of the app
 - [x] Start working on visualize for presentation, what to plot? what kind of plot?
 - [x] Finish the front page and structure
-- [ ] Find out how to calculate F score from Graphlab
-- [ ] the diff b/w SVD and factorization in machine
-- [ ] Run simple item-item CF to compare
+- [x] Run simple item-item CF to compare
 
 ### Day 10
-- [ ] Visualize for presentation
-- [ ] Finish online learning part
 - [x] test app locally
-- [ ] upload to ec2
-- [ ] Add visual effect
+- [x] Add user features to the model
 
-### Day9
+### Day 11
+- [x] the diff b/w SVD and factorization in machine
+- [x] Among most lended loans, what's the topics in story? Word cloud?
+- [x] Write profile for Zack
+- [x] Finish ppt
+
+### Day 12
+- [ ] Run models with diff set of features
+- [ ] Address cold start problem
 - [ ] 
 
 
@@ -132,9 +109,9 @@ Kiva is not like a regular microfinancing servie because the fully-funded loans 
 Kiva's data snapshot containing 3 directories: `lenders` contains 1615 json files about lender information; `loans` contains 1683 json files about loans; and `loans_lenders` contains 545 json files of lenders for each loan. 
 
 ## Challenges in the Project
-- The `loans_lenders` data is not formatted suitable for a recommender recommending loans to lenders because it's stored according to loans. It brings serious sparcity. So I transformed it to a lender-loan format. 
-- Recommender system is inherently hard to test due to sparcity. I always held out 20% of the data for validation. 
-- The famous cold start problem. !!!!!!!!!!!!!! solution?????
+The `loans_lenders` data is not formatted suitable for a recommender recommending loans to lenders because it's stored according to loans. It brings serious sparcity. So I transformed it to a lender-loan format. 
+
+Recommender system is inherently hard to test due to sparcity. I always held out 20% of the data for validation. 
 
 
 ## Getting Started
@@ -144,19 +121,6 @@ Use Graphlab's ranking factorization recommender because we don't have explicit 
 
 ## Metric to Optimize
 The metric used to optimize is recall because comparing to the situation where the model recommends stories users won't likely to lend, we really want to raise the exposure of stories which users might be interested so that they're more likely to lend. 
-
-## Iteration 1
-item-item similarity
-
-
-## Iteration 2
-factorization without features
-
-## Iteration 3
-factorization with features: activity, loan_amount, country, posted_date, sector
-
-## Iteration 4
-Tfidf, text features in description
 
 ## Things to Improve
 - Study user beheviors and engineer features accordingly.
