@@ -1,9 +1,5 @@
 # Kipfian
 
-- [x] add documentations
-- [ ] upload the final model to dropbox
-- [ ] add running manual to README
-
 ## One-liner
 A recommender system for [Kiva.org](http://www.kiva.org). Working prototype: [http://www.kipfian.com](http://www.kipfian.com)
 
@@ -21,7 +17,7 @@ The first model I tried is the factorization machine because of two reasons:
 1. the data is extremely sparse so that capturing interactions is important.
 2. I hope to capture side information like borrower's gender and posted date.
 
-The second model is an item-item collabrative filtering which accounts for interactions. 
+The second model is an item-item collabrative filtering which accounts for interactions. It provides fast computing and higher recall score. 
 
 ## Challenges
 **Computational cost**. Factorization Machine is difficult to compute because of the size of the feature matrix. In this project, the feature matrix has 1.27M rows and over 2.4M columns. A simple model with minimum features could run 2-3 hours and the most complex one ran for 5 days. It's not really feasible for a two-week project and Kiva, as a NGO, doesn't necessary have the resources to implement it. 
@@ -36,5 +32,9 @@ However, the recall may not be the best metric because the goal of a recommender
 - Get more data and more features, like image processing, NLP for non-English text, and lending transaction details. 
 - Have the business goal in mind and consider other ways like a better page composition or marketing campaigns. 
 
-
-
+## How to Run it locally?
+1. Clone this repo.
+2. Download the model from [my dropbox]() (300+MB), create a `models` directory here, and unzip the model in that directory to be `models/item_item_cf`.
+3. Install [Flask](http://flask.pocoo.org/docs/0.10/installation/) if you don't have it.
+4. In terminal, go to this repo directory and type `python app.py`. If it shows permission error, type `sudo python app.py` and enter admin password.
+5. Open browser and go to `http://0.0.0.0:6969/`.
