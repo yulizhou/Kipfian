@@ -1,131 +1,36 @@
 # Kipfian
 
-**Presentation**
-
-Improvement:
-
-- Shorten the first part
-- Shorten the Next Step part
-- Add comparison
-    - Which features are important? How to decide?
-    - precision / recall / which one to optimize / AUC
-- Custom domain name
-
-
-compare to benchmark of randomly choosing
-
-
-Adam's advice:
-doesn't have to use FM
-show process of choosing between models
-show knowledge about the tradeoff
-show features used
-show good next steps
-
-
-
-
-##To-do
-### Day 1
-- [x] Store the data / combine files / take a sample
-    - [x] Load all data into MongoDB
-    - [x] Sample part of the data according to lenders
-- [x] EDA, log every question to be answered
-    - [x] Univariate
-    - [x] Multi-variate
-    - [x] How about the number of loans of each lender?
-    - [x] How about the number of lenders of each loan?
-
-### Day 2
-- [x] Finish iter 1: naive rec sys base model with Dato
-- [x] Finish iter 2: use Dato's factorization recommender
-
-### Day 3
-- [x] Understand ranking factorization machine
-- [x] Finish iter 3: add naive features as side features (date, month, year lended)
-
-### Day 4
-- [x] Drop duplicates in mongodb
-- [x] Research on how to train the model on new loans and new users in graphlab
-
-### Day 5
-- [x] Transform data from loan-lenders to lender-loans
-- [x] Retrain iter 3 model after got data loaded
-
-### Day 6
-- [x] Design and config workflow with ec2
-    - [x] Clean and upload csv
-        - [x] loans
-        - [x] lenders
-        - [x] lenders_loans
-    - [x] Do a trial first, how to run on csv files only
-    - [x] Touch up all codes into .py and upload
-- [x] Learn some factorization machine stuff
-
-### Day 7
-
-### Day 8
-- [x] Finish iter 4: adding text features
-
-### Day 9
-- [x] Create a working prototype of the app
-- [x] Start working on visualize for presentation, what to plot? what kind of plot?
-- [x] Finish the front page and structure
-- [x] Run simple item-item CF to compare
-
-### Day 10
-- [x] test app locally
-- [x] Add user features to the model
-
-### Day 11
-- [x] the diff b/w SVD and factorization in machine
-- [x] Among most lended loans, what's the topics in story? Word cloud?
-- [x] Write profile for Zack
-- [x] Finish ppt
-
-### Day 12
-- [ ] Run models with diff set of features
-- [ ] Address cold start problem
-- [ ] 
-
-
-
--------------------
-
-
-
-
 ## One-liner
-
-Runnable App: [](#)
-
-## Three-liner
-
+A recommender system for [Kiva.org](http://www.kiva.org). Working prototype: [http://www.kipfian.com](http://www.kipfian.com)
 
 ## Motivation & Project Value
-Kiva is not like a regular microfinancing servie because the fully-funded loans may possibly have a huge impact on the borrower's life and even more people by providing the field partner with liquity and transfering the risk. I hope to help the borrower side and Kiva by maximizing the likelihood of fully funded. 
+The official repayment rate from Kiva is around 98%. But the number is only important to lenders, not loans. If we define a loan's success as getting fully-funded, then the success rate will be 96%. It's still very high but the other 4% is actually over 32721 loans. Even one accounts for the 1% official default rate and assumes all of the 1% are fraud, there're still many loans couldn't get any money. What if they do need helps? What if they didn't finish because of bad timing or people's bias? How can we help loans to maximize the likelihood of success?
+
+There're many ways to achieve the goal. A recommender may help. 
 
 ## Data Source
-Kiva's data snapshot containing 3 directories: `lenders` contains 1615 json files about lender information; `loans` contains 1683 json files about loans; and `loans_lenders` contains 545 json files of lenders for each loan. 
+Kiva's data dump contains over 3000 json files covering lenders, loans, and the lending relationship between them, dating back to 2006. It's quite a mess with duplicates and tons of NaNs. 
 
-## Challenges in the Project
-The `loans_lenders` data is not formatted suitable for a recommender recommending loans to lenders because it's stored according to loans. It brings serious sparcity. So I transformed it to a lender-loan format. 
+## Models
+The first model I tried is the factorization machine because of two reasons:
 
-Recommender system is inherently hard to test due to sparcity. I always held out 20% of the data for validation. 
+1. the data is extremely sparse so that capturing interactions is important.
+2. I hope to capture side information like borrower's gender and posted date.
 
+The second model is an item-item collabrative filtering which accounts for interactions. 
 
-## Getting Started
+## Challenges
+**Computational cost**. Factorization Machine is difficult to compute because of the size of the feature matrix. In this project, the feature matrix has 1.27M rows and over 2.4M columns. A simple model with minimum features could run 2-3 hours and the most complex one ran for 5 days. It's not really feasible for a two-week project and Kiva, as a NGO, doesn't necessary have the resources to implement it. 
 
-## Basic Model Chosen
-Use Graphlab's ranking factorization recommender because we don't have explicit rating to rank. Instead of ratings, the model uses latent factors to rank recommended items according to the likelihood of observing those lender-loan pairs. 
+**Evaluating the model**. Because the target is implicit, RMSE is not feasible. Precision score will be biased because the there're a lot of implicit negative feedbacks. Even if I accounted for those zeros, they don't necssarily mean dislikes. The best metric now is recall, meaning for those loans people like, what's the percentage of them are in the recommendations.
 
-## Metric to Optimize
-The metric used to optimize is recall because comparing to the situation where the model recommends stories users won't likely to lend, we really want to raise the exposure of stories which users might be interested so that they're more likely to lend. 
+However, the recall may not be the best metric because the goal of a recommender is to increase the click through or conversion. So a better one could be click-through rate or conversion rate. 
 
-## Things to Improve
-- Study user beheviors and engineer features accordingly.
-- Run AB test to evaluate the performance. 
-
+## Next Steps
+- Run AB tests to examine the effectiveness of models with metrics like CTR
+- Address cold start problem better. Currently it recommends the most popular one. A better option could be recommending loans that are almost expired and also almost finished. 
+- Get more data and more features, like image processing, NLP for non-English text, and lending transaction details. 
+- Have the business goal in mind and consider other ways like a better page composition or marketing campaigns. 
 
 
 
