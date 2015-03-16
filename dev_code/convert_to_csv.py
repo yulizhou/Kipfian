@@ -7,13 +7,19 @@ import re
 
 
 LENDER_PATH = '../data/lenders/'
-LENDER_CSV = '../data/lenders.csv'
 LOAN_PATH = '../data/loans/'
+LENDER_CSV = '../data/lenders.csv'
 LOAN_CSV = '../data/loans.csv'
 LENDER_LOAN_CSV = '../data/lenders_loans.csv'
 
 
 def create_pairs():
+    '''
+    INPUT: None
+    OUTPUT: None
+
+    Read pair data from MongoDB and write to csv.
+    '''
     # create & upload lenders_loans pair csv file
     client = MongoClient()
     kiva = client.kiva
@@ -32,26 +38,23 @@ def create_pairs():
                 wr.writerow([r[1]['lender_id'], l])
 
 
-#clean loans json files, grab what I might need, and create a csv file
-
 def clean_loans():
+    '''
+    INPUT: None
+    OUTPUT: None
+
+    Read loan data from MongoDB, clean a little bit, and write to csv.
+    '''
     # get data from json files
     for f in os.listdir(LOAN_PATH):
         d = json.load(open(LOAN_PATH+f))['loans']
         df = pd.DataFrame.from_dict(d)
 
-        df = df.drop(['basket_amount',
-                      'currency_exchange_loss_amount',
-                      'delinquent',
-                      'payments',
-                      'funded_amount',
-                      'funded_date',
-                      'journal_totals',
-                      'name',
-                      'tags',
-                      'themes',
-                      'translator',
-                      'video'], axis=1)
+        df.drop(['basket_amount', 'currency_exchange_loss_amount',
+                 'delinquent', 'payments', 'funded_amount',
+                 'funded_date', 'journal_totals', 'name',
+                 'tags', 'themes', 'translator', 'video'],
+                axis=1, inplace=True)
 
         # clean & separate borrowers
         df['gender'] = df['borrowers'].map(
@@ -85,10 +88,12 @@ def clean_loans():
             lambda x: x['repayment_interval'])
         # earliest scheduled payment date
         df['earliest_scheduled_payment'] = df['terms'].map(
-          lambda x: x['scheduled_payments'][0]['due_date'] if x['scheduled_payments'] else None)
+            lambda x: x['scheduled_payments'][0]['due_date']
+            if x['scheduled_payments'] else None)
         # last scheduled payment date
         df['last_scheduled_payment'] = df['terms'].map(
-          lambda x: x['scheduled_payments'][-1]['due_date'] if x['scheduled_payments'] else None)
+            lambda x: x['scheduled_payments'][-1]['due_date']
+            if x['scheduled_payments'] else None)
 
         # clean use
         df['use'] = df['use'].map(
@@ -100,9 +105,13 @@ def clean_loans():
                   encoding='utf-8', index=False, line_terminator='\r\n')
 
 
-# ##clean lenders json files, grab what I need, and create a csv file
-
 def clean_lenders():
+    '''
+    INPUT: None
+    OUTPUT: None
+
+    Read lender data from MongoDB, clean a little bit, and write to csv.
+    '''
     for f in os.listdir(LENDER_PATH):
         d = json.load(open(LENDER_PATH+f))['lenders']
         dfl = pd.DataFrame.from_dict(d)

@@ -9,6 +9,12 @@ LOAN_PATH = '../data/loans/'
 
 
 def load_loans_lenders(loans_lenders):
+    '''
+    INPUT: MongoDB collection cursor
+    OUTPUT: None
+
+    Load json files and store in MongoDB.
+    '''
     for file in listdir(LOAN_LENDER_PATH):
         d = json.load(open(LOAN_LENDER_PATH+file))['loans_lenders']
         loans_lenders.insert(d)
@@ -16,6 +22,12 @@ def load_loans_lenders(loans_lenders):
 
 
 def load_lenders(lender):
+    '''
+    INPUT: MongoDB collection cursor
+    OUTPUT: None
+
+    Load json files and store in MongoDB.
+    '''
     for file in listdir(LENDER_PATH):
         d = json.load(open(LENDER_PATH+file))['lenders']
         lenders.insert(d)
@@ -23,6 +35,12 @@ def load_lenders(lender):
 
 
 def load_loans(loans):
+    '''
+    INPUT: MongoDB collection cursor
+    OUTPUT: None
+
+    Load json files and store in MongoDB.
+    '''
     for file in listdir(LOAN_PATH):
         d = json.load(open(LOAN_PATH+file))['loans']
         loans.insert(d)
@@ -30,6 +48,12 @@ def load_loans(loans):
 
 
 def transform_lenders_loans(lenders_loans):
+    '''
+    INPUT: MongoDB collection cursor
+    OUTPUT: None
+
+    Load loan_lenders data from MongoDB and convert to lender_loans.
+    '''
     # create index first to speed things up
     tc = lenders.find({'loan_count': {'$gt': 0}}, {'lender_id': 1, '_id': 0})
     lender_ids = list(tc)

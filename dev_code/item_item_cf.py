@@ -6,6 +6,12 @@ PAIR_PATH = '../data/cleaned_lender_loan_pairs.csv'
 
 # run the model
 def run_model(sf):
+    '''
+    INPUT: SFrame pair data
+    OUTPUT: None
+
+    Read pair data and run the model, print out result, and save it.
+    '''
     # split train test
     train, test = gl.recommender.util.random_split_by_user(sf,
                                                            user_id='lender_id',

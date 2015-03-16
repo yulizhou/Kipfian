@@ -1,5 +1,9 @@
 # Kipfian
 
+- [x] add documentations
+- [ ] upload the final model to dropbox
+- [ ] add running manual to README
+
 ## One-liner
 A recommender system for [Kiva.org](http://www.kiva.org). Working prototype: [http://www.kipfian.com](http://www.kipfian.com)
 

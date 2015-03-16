@@ -1,6 +1,5 @@
 import pandas as pd
 import graphlab as gl
-from random import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import word_tokenize
@@ -10,13 +9,19 @@ PAIR_PATH = '../data/cleaned_lender_loan_pairs.csv'
 LOAN_PATH = '../data/cleaned_loans.csv'
 
 
-# ##Feature Engineering
+# Feature Engineering
 # This iteration will take into account several simple features:
 # activity, loan_amount, country, posted_date, sector
 
 
 # dummify posted_date to seasons
 def convert_to_season(x):
+    '''
+    INPUT: int of month
+    OUTPUT: string of season
+
+    Convert the month to season.
+    '''
     m = x.month
     if m < 4:
         return 'Spring'
@@ -40,44 +45,60 @@ def tokenize(doc):
 
 
 def get_vectorizer(descriptions, num_features=100):
+    '''
+    INPUT: array of documents, int of number of features wanted
+    OUTPUT: vectorizer
+
+    Create Tf-idf of the input documents.
+    '''
     vect = TfidfVectorizer(max_features=num_features, stop_words='english', tokenizer=tokenize)
     return vect.fit(descriptions)
 
 
 # getting features
 def get_loan_features(df):
-    raw_features = df[['bonus_credit_eligibility', 'loan_amount', 'posted_date',
-                       'use', 'gender', 'family', 'country', 'repayment_term',
-                       'repayment_interval', 'id']]
+    '''
+    INPUT: data frame of cleaned loan
+    OUTPUT: SFrame of loan features
 
-    raw_features['season'] = \
-        raw_features['posted_date'].map(lambda x: convert_to_season(x))
-    raw_features = pd.concat([raw_features,
-                              pd.get_dummies(raw_features['season'], prefix='season_')], axis=1)
-    raw_features = raw_features.drop(['season', 'posted_date'], axis=1)
+    Get features and convert to SFrame for the model.
+    '''
+    df = df[['bonus_credit_eligibility', 'loan_amount', 'posted_date',
+             'use', 'gender', 'family', 'country', 'repayment_term',
+             'repayment_interval', 'id']]
+
+    df['season'] = \
+        df['posted_date'].map(lambda x: convert_to_season(x))
+    df = pd.concat([df, pd.get_dummies(df['season'], prefix='season_')], axis=1)
+    df.drop(['season', 'posted_date'], axis=1, inplace=True)
 
     # dummify repayment_interval
-    raw_features = pd.concat([raw_features,
-                              pd.get_dummies(raw_features['repayment_interval'],
-                              prefix='repayment_interval_')], axis=1)
-    raw_features = raw_features.drop(['repayment_interval'], axis=1)
+    df = pd.concat([df, pd.get_dummies(df['repayment_interval'],
+                                       prefix='repayment_interval_')], axis=1)
+    df.drop(['repayment_interval'], axis=1, inplace=True)
 
     # get tfidf of 'use'
-    text = raw_features['use'].values
+    text = df['use'].values
     tfidf = pd.DataFrame(get_vectorizer(text).transform(text).toarray())
     tfidf.columns = tfidf.columns.astype(str)
     tfidf = tfidf.astype(float)
-    raw_features = pd.concat([raw_features, tfidf], axis=1, join_axes=[raw_features.index])
-    # drop use
-    raw_features = raw_features.drop(['use'], axis=1)
-    raw_features = raw_features.fillna(0)
-    loan_feature = gl.SFrame(raw_features.to_dict(orient='list'))
+    df = pd.concat([df, tfidf], axis=1, join_axes=[df.index])
+    df = df.drop(['use'], axis=1)
+    df = df.fillna(0)
+
+    loan_feature = gl.SFrame(df.to_dict(orient='list'))
     loan_feature.rename({'id': 'loan_id'})
     return loan_feature
 
 
 # run the model
-def run_model(sf, df, loan_feature):
+def run_model(sf, loan_feature):
+    '''
+    INPUT: SFrame of pair data, SFrame of loan feature data
+    OUTPUT: None
+
+    Read pair data and run the model, print out result, and save it.
+    '''
     # split train test
     train, test = gl.recommender.util.random_split_by_user(sf,
                                                            user_id='lender_id',

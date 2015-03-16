@@ -27,12 +27,23 @@ def tokenize(doc):
 
 
 def get_vectorizer(descriptions, num_features=100):
+    '''
+    INPUT: array of documents, int of number of features wanted
+    OUTPUT: vectorizer
+
+    Create Tf-idf of the input documents.
+    '''
     vect = TfidfVectorizer(max_features=num_features, stop_words='english', tokenizer=tokenize)
     return vect.fit(descriptions)
 
 
-# getting features
 def get_loan_features(df):
+    '''
+    INPUT: data frame of cleaned loan
+    OUTPUT: SFrame of loan features
+
+    Get features and convert to SFrame for the model.
+    '''
     df = df[['bonus_credit_eligibility', 'loan_amount', 'lender_count',
              'use', 'gender', 'family', 'country',
              'repayment_interval', 'id', 'posted_year', 'posted_month'
@@ -62,6 +73,12 @@ def get_loan_features(df):
 
 
 def get_lender_features(df):
+    '''
+    INPUT: data frame of cleaned lender
+    OUTPUT: SFrame of lender features
+
+    Get features and convert to SFrame for the model.
+    '''
     df = df[['lender_id', 'loan_count', 'member_since']]
 
     df['loan_count'] = StandardScaler().fit_transform(df['loan_count'])
@@ -77,6 +94,12 @@ def get_lender_features(df):
 
 # run the model
 def run_model(sf, loan_feature, lender_feature):
+    '''
+    INPUT: SFrame of pair data, SFrame of loan feature data
+    OUTPUT: None
+
+    Read pair data and run the model, print out result, and save it.
+    '''
     # split train test
     train, test = gl.recommender.util.random_split_by_user(sf,
                                                            user_id='lender_id',
