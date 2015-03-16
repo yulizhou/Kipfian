@@ -3,17 +3,12 @@ import graphlab as gl
 from random import random
 
 
+PAIR_PATH = '../data/cleaned_lender_loan_pairs.csv'
+LOAN_PATH = '../data/cleaned_loans.csv'
+
 # ##Feature Engineering
 # This iteration will take into account several simple features:
 # activity, loan_amount, country, posted_date, sector
-
-
-# clean pairs data
-def clean_pair_date(sf):
-    sf.rename({'X1': 'lender_id', 'X2': 'loan_id'})
-    sf['loan_id'] = sf['loan_id'].astype(str)
-    sf['lender_id'] = sf['lender_id'].astype(str)
-    return sf
 
 
 # clean loan data
@@ -88,7 +83,7 @@ def get_loan_features(df):
 
 
 # run the model
-def run_model(sf, df, loan_feature):
+def run_model(sf, loan_feature):
     # split train test
     train, test = gl.recommender.util.random_split_by_user(sf, user_id='lender_id', item_id='loan_id', item_test_proportion=0.3)
 
@@ -115,16 +110,12 @@ def run_model(sf, df, loan_feature):
 
 
 if __name__ == '__main__':
-    # load pairs into SFrame
-    sf = gl.SFrame.read_csv('data/lender_loan_pairs.csv', header=False, delimiter=',', verbose=False)
-    sf = clean_pair_date(sf)
+    # load data
+    df_loan = pd.read_csv(LOAN_PATH)
+    sf = gl.SFrame.read_csv(PAIR_PATH, delimiter=',', verbose=False)
 
-    # Create side features
+    # get features
+    loan_feature = get_loan_features(df_loan)
 
-    df = pd.read_csv('data/loans.csv', delimiter=',')
-    df = clean_loan_data(df)
-
-    sf, df = drop_unexsiting_loan_ids(sf, df)
-    loan_feature = get_loan_features(df)
-
-    run_model(sf, df, loan_feature)
+    # run model
+    run_model(sf, loan_feature)

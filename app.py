@@ -1,14 +1,13 @@
 from flask import Flask
 from flask import request
 from flask import render_template
-# import pickle
 import graphlab as gl
 import pandas as pd
 
 
 app = Flask(__name__)
-
-recommender = gl.load_model('models/item_item_cf')
+MODEL_PATH = 'models/item_item_cf'
+recommender = gl.load_model(MODEL_PATH)
 
 
 @app.route('/')
@@ -32,7 +31,8 @@ def show_recommendations():
             img_url = "http://www.kiva.org/img/s170/" + img_id + ".jpg"
             page_url = "http://www.kiva.org/lend/" + loan_id
             recommendation.append((description, img_url, page_url))
-    return render_template('show_recommendations.html', recommendation=recommendation[:3])
+    return render_template('show_recommendations.html',
+                           recommendation=recommendation[:3])
 
 
 if __name__ == '__main__':

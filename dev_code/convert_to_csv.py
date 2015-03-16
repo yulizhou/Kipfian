@@ -1,8 +1,3 @@
-# #From local to EC2
-# 1. create & upload lenders_loans pair csv file
-# 2. clean loans json files, grab what I might need, and create a csv file
-# 3. clean lenders json files, grab what I need, and create a csv file
-
 import pandas as pd
 from pymongo import MongoClient
 import csv
@@ -11,15 +6,18 @@ import json
 import re
 
 
-client = MongoClient()
-kiva = client.kiva
-mongo_loans = kiva.loans
-mongo_lenders = kiva.lenders
-mongo_lenders_loans = kiva.lenders_loans
+LENDER_PATH = '../data/lenders/'
+LENDER_CSV = '../data/lenders.csv'
+LOAN_PATH = '../data/loans/'
+LOAN_CSV = '../data/loans.csv'
+LENDER_LOAN_CSV = '../data/lenders_loans.csv'
 
 
 def create_pairs():
-    # ##create & upload lenders_loans pair csv file
+    # create & upload lenders_loans pair csv file
+    client = MongoClient()
+    kiva = client.kiva
+    mongo_lenders_loans = kiva.lenders_loans
 
     # get lenders_loans
     cursor_lenders_loans = mongo_lenders_loans.find({}, {'_id': 0})
@@ -27,7 +25,7 @@ def create_pairs():
     lenders_loans.dropna(inplace=True)
 
     # create lender-loan pairs
-    with open('data/lenders_loans.csv', 'w') as f:
+    with open(LENDER_LOAN_CSV, 'w') as f:
         wr = csv.writer(f, delimiter=',')
         for r in lenders_loans.iterrows():
             for l in r[1]['loan_ids']:
@@ -38,8 +36,8 @@ def create_pairs():
 
 def clean_loans():
     # get data from json files
-    for f in os.listdir('data/loans'):
-        d = json.load(open('data/loans/'+f))['loans']
+    for f in os.listdir(LOAN_PATH):
+        d = json.load(open(LOAN_PATH+f))['loans']
         df = pd.DataFrame.from_dict(d)
 
         df = df.drop(['basket_amount',
@@ -98,15 +96,15 @@ def clean_loans():
 
         df = df.drop(['terms'], axis=1)
 
-        df.to_csv(open('data/loans.csv', 'a'),
+        df.to_csv(open(LOAN_CSV, 'a'),
                   encoding='utf-8', index=False, line_terminator='\r\n')
 
 
 # ##clean lenders json files, grab what I need, and create a csv file
 
 def clean_lenders():
-    for f in os.listdir('data/lenders'):
-        d = json.load(open('data/lenders/'+f))['lenders']
+    for f in os.listdir(LENDER_PATH):
+        d = json.load(open(LENDER_PATH+f))['lenders']
         dfl = pd.DataFrame.from_dict(d)
 
         dfl = dfl[['country_code',
@@ -121,7 +119,7 @@ def clean_lenders():
         dfl['image_template_id'] = dfl['image'].map(lambda x: x['template_id'])
         dfl = dfl.drop(['image'], axis=1)
 
-        dfl.to_csv(open('data/lenders.csv', 'a'),
+        dfl.to_csv(open(LENDER_CSV, 'a'),
                    encoding='utf-8', index=False, line_terminator='\r\n')
 
 
