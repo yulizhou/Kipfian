@@ -101,7 +101,8 @@ def drop_unexsiting_loan_ids(sf, df):
     Some loan ids in pair data don't exists in loan data,
     which need to be cleaned.
     '''
-    loan_ids_in_pairs = sorted(list(sf['loan_id'].unique()))
+    loan_ids_in_pairs = list(sf['loan_id'].unique())
+    # loan_ids_in_pairs = sorted(list(sf['loan_id'].unique()))
     loan_ids_in_loans = sorted(list(df['id'].values))
     loan_ids_intersection = set(loan_ids_in_loans) & set(loan_ids_in_pairs)
 

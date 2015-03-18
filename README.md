@@ -6,18 +6,18 @@ A recommender system for [Kiva.org](http://www.kiva.org). Working prototype: [ht
 ## Motivation & Project Value
 The official repayment rate from Kiva is around 98%. But the number is only important to lenders, not loans. If we define a loan's success as getting fully-funded, then the success rate will be 96%. It's still very high but the other 4% is actually over 32721 loans. Even one accounts for the 1% official default rate and assumes all of the 1% are fraud, there're still many loans couldn't get any money. What if they do need helps? What if they didn't finish because of bad timing or people's bias? How can we help loans to maximize the likelihood of success?
 
-There're many ways to achieve the goal. A recommender may help. 
+There're many ways to achieve the goal. A good recommender will help.
 
 ## Data Source
-Kiva's data dump contains over 3000 json files covering lenders, loans, and the lending relationship between them, dating back to 2006. It's quite a mess with duplicates and tons of NaNs. 
+Kiva's data dump contains over 3000 json files covering lenders, loans, and the lending relationship between them, dating back to 2006. The data has many duplicates and tons of null values.
 
 ## Models
-The first model I tried is the factorization machine because of two reasons:
+The first model I tried is the factorization machine due to two reasons:
 
-1. the data is extremely sparse so that capturing interactions is important.
-2. I hope to capture side information like borrower's gender and posted date.
+1. the data is extremely sparse so that capturing interactions is very important.
+2. I hope to capture side information like gender, posted date, and repayment interval.
 
-The second model is an item-item collabrative filtering which accounts for interactions. It provides fast computing and higher recall score. 
+The second model is an item-item collabrative filtering which accounts for interactions. It provides fast computing and relatively higher recall score. 
 
 ## Challenges
 **Computational cost**. Factorization Machine is difficult to compute because of the size of the feature matrix. In this project, the feature matrix has 1.27M rows and over 2.4M columns. A simple model with minimum features could run 2-3 hours and the most complex one ran for 5 days. It's not really feasible for a two-week project and Kiva, as a NGO, doesn't necessary have the resources to implement it. 
