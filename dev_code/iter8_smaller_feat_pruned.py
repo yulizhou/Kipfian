@@ -116,22 +116,22 @@ def run_model(sf, loan_feature, lender_feature):
                                                                 num_factors=20,
                                                                 regularization=1e-9,
                                                                 binary_target=False,
-                                                                max_iterations=15,
+                                                                max_iterations=3,
                                                                 num_sampled_negative_examples=500,
                                                                 verbose=True)
 
-    print m.evaluate(test, metric='precision_recall')
+    print m.evaluate_precision_recall(test, cutoffs=[100000, 300000, 500000, 700000])
     m.save('../models/iter8_smaller_feat_pruned')
 
 
-def prune_rare_lenders(df, threshold=500):
+def prune_inactive_lenders(df, threshold=500):
     '''
     INPUT: data frame of lender data, int of the threshhold to prune
     OUTPUT: pruned data frame
 
     Prune the data.
     '''
-    return df[df['loan_count'] > num_to_prune]
+    return df[df['loan_count'] > threshold]
 
 
 def drop_unexsiting_lender_ids(sf, df):
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     sf = gl.SFrame.read_csv(PAIR_PATH, delimiter=',', verbose=False)
 
     # pruning
-    df_lender = prune_rare_lenders(df_lender, 5000)
+    df_lender = prune_inactive_lenders(df_lender, 5000)
     sf, df_lender = drop_unexsiting_lender_ids(sf, df_lender)
     sf, df_loan = drop_unexsiting_loan_ids(sf, df_loan)
 

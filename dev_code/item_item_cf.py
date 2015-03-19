@@ -12,6 +12,7 @@ def run_model(sf):
 
     Read pair data and run the model, print out result, and save it.
     '''
+    sf['lender_id'] = sf['lender_id'].astype(str)
     # split train test
     train, test = gl.recommender.util.random_split_by_user(sf,
                                                            user_id='lender_id',
