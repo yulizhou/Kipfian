@@ -7,6 +7,7 @@ import pandas as pd
 
 app = Flask(__name__)
 MODEL_PATH = 'models/item_item_cf'
+# MODEL_PATH = 'models/fm_feat_active_users_5000'
 recommender = gl.load_model(MODEL_PATH)
 
 
@@ -36,4 +37,4 @@ def show_recommendations():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6969, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)
