@@ -1,7 +1,7 @@
 # Kipfian
 
 ## One-liner
-A recommender system for [Kiva.org](http://www.kiva.org). Working prototype: [http://www.kipfian.com](http://www.kipfian.com)
+A recommender system for [Kiva.org](http://www.kiva.org).
 
 ## Motivation & Project Value
 Lenders on Kiva can enjoy a repayment rate of 98% officially. However, if we take a look from loans' perspective, 4% of them (over 32,000) never got funded, even if one accounting for the 1% official default rate and assuming all of them are fraud. What if they do need help? What if they didn't finish because of bad timing or people's bias? How can we help loans to maximize the likelihood of getting funded?
